@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cockroachdb-node2
+spec:
+  selector:
+    app: cockroachdb-node2
+  ports:
+    - name: sql
+      port: 26257
+      targetPort: 26257
+    - name: http
+      port: 8080
+      targetPort: 8080

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-publicaciones-deploy
+  labels:
+    app: ms-publicaciones
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-publicaciones
+  template:
+    metadata:
+      labels:
+        app: ms-publicaciones
+    spec:
+      containers:
+        - name: ms-publicaciones
+          image: zuix1384/ms-publicaciones:latest
+          ports:
+            - containerPort: 7004
+          env:
+            - name: DB_URL
+              value: jdbc:postgresql://cockroachdb-svc:26257/publicaciones_db?sslmode=disable
+            - name: DB_USERNAME
+              value: root
+            - name: DB_PASSWORD
+              value: ""
+            - name: RABBITMQ_HOST
+              value: rabbitmq-svc
+            - name: RABBITMQ_PORT
+              value: "5672"
+            - name: RABBITMQ_USERNAME
+              value: admin
+            - name: RABBITMQ_PASSWORD
+              value: admin
+            - name: EUREKA_SERVER_URL
+              value: http://eureka-server-svc:8761/eureka/
+            - name: PORT
+              value: "7004"

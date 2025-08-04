@@ -1,0 +1,41 @@
+# SERVICIO-SINCRONIZACION
+
+spring:
+  application:
+    name: SERVICIO-SINCRONIZACION
+
+  rabbitmq:
+    # host: localhost
+    host: ${RABBITMQ_HOST:rabbitmq-svc}
+    # port: 5672
+    port: ${RABBITMQ_PORT:5672}
+    # username: admin
+    username: ${RABBITMQ_USERNAME:admin}
+    # password: admin
+    password: ${RABBITMQ_PASSWORD:admin}
+
+# server:
+#   port: 0
+server:
+  port: ${PORT:7005}
+
+eureka:
+  client:
+    # service-url:
+    #   defaultZone: http://localhost:8761/eureka/
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://eureka-server-svc:8761/eureka/}
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${random.value}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+
+reloj:
+  intervalo: 10

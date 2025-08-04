@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: zuix1384/ms-api-gateway:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: EUREKA_SERVER_URL
+              value: http://eureka-server-svc:8761/eureka/
+            - name: SPRING_CONFIG_LOCATION
+              value: file:/app/config/
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config
+              readOnly: true
+      volumes:
+        - name: config-volume
+          configMap:
+            name: api-gateway-config

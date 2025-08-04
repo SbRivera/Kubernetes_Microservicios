@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gateway Swagger</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css" />
+</head>
+<body>
+<div id="swagger-ui"></div>
+
+<script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
+<script src="https://unpkg.com/swagger-ui-dist/swagger-ui-standalone-preset.js"></script>
+
+<script>
+    window.onload = async () => {
+        try {
+            const res = await fetch('/swagger-config');
+            const config = await res.json();
+
+            console.log("Swagger config:", config);
+
+            SwaggerUIBundle({
+                dom_id: '#swagger-ui',
+                urls: config.urls,
+                urlsPrimaryName: config.urls[0].name,
+                deepLinking: true,
+                layout: "StandaloneLayout",  // ✅ ESTE CAMBIO ES CLAVE
+                validatorUrl: null,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ]
+            });
+
+        } catch (error) {
+            console.error("Error loading Swagger config:", error);
+            document.body.innerHTML = "<h2>Error loading Swagger config</h2>";
+        }
+    };
+</script>
+</body>
+</html>

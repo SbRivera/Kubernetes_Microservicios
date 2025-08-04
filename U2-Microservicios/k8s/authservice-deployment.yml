@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authservice-deploy
+  labels:
+    app: authservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authservice
+  template:
+    metadata:
+      labels:
+        app: authservice
+    spec:
+      containers:
+        - name: authservice
+          image: zuix1384/authservice:latest
+          ports:
+            - containerPort: 7001
+          env:
+            - name: DB_URL
+              value: jdbc:postgresql://cockroachdb-node2:26257/authdb?sslmode=disable
+            - name: DB_USERNAME
+              value: root
+            - name: DB_PASSWORD
+              value: ""
+            - name: EUREKA_SERVER_URL
+              value: http://eureka-server-svc:8761/eureka/
+            - name: JWT_SECRET
+              value: u6rckmOPVwT9OuoWZf9lZtabfM6TTRGTYiS6OQ4Nkb8
+            - name: PORT
+              value: "7001"

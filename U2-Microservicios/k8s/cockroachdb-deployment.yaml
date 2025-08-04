@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cockroachdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cockroachdb
+  template:
+    metadata:
+      labels:
+        app: cockroachdb
+    spec:
+      containers:
+        - name: cockroachdb
+          image: cockroachdb/cockroach:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - exec cockroach start --insecure --store=node1 --listen-addr=0.0.0.0:26257 --http-addr=0.0.0.0:8080 --join=cockroachdb-svc --advertise-addr=$POD_IP
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          ports:
+            - containerPort: 26257
+            - containerPort: 8080
+          volumeMounts:
+            - name: cockroach-data
+              mountPath: /cockroach/cockroach-data
+      volumes:
+        - name: cockroach-data
+          emptyDir: {}

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-catalogo-deploy
+  labels:
+    app: ms-catalogo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-catalogo
+  template:
+    metadata:
+      labels:
+        app: ms-catalogo
+    spec:
+      containers:
+        - name: ms-catalogo
+          image: zuix1384/ms-catalogo:latest
+          ports:
+            - containerPort: 7002
+          env:
+            - name: DB_URL
+              value: jdbc:postgresql://cockroachdb-node3:26257/catalogo_db?sslmode=disable
+            - name: DB_USERNAME
+              value: root
+            - name: DB_PASSWORD
+              value: ""
+            - name: RABBITMQ_HOST
+              value: rabbitmq-svc
+            - name: RABBITMQ_PORT
+              value: "5672"
+            - name: RABBITMQ_USERNAME
+              value: admin
+            - name: RABBITMQ_PASSWORD
+              value: admin
+            - name: EUREKA_SERVER_URL
+              value: http://eureka-server-svc:8761/eureka/
+            - name: PORT
+              value: "7002"

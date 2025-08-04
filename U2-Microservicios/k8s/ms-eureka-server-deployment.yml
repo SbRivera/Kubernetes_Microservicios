@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-eureka-server-deploy
+  labels:
+    app: ms-eureka-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-eureka-server
+  template:
+    metadata:
+      labels:
+        app: ms-eureka-server
+    spec:
+      containers:
+        - name: ms-eureka-server
+          image: zuix1384/ms-eureka-server:latest
+          ports:
+            - containerPort: 8761
+          env:
+            - name: PORT
+              value: "8761"
